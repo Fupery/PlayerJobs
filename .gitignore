@@ -1,0 +1,10 @@
+#.gitignore
+.classpath
+.idea/*
+.project
+.settings/*
+target/*
+PlayerJobs.iml
+dependency-reduced-pom.xml
+
+

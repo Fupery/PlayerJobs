@@ -1,0 +1,23 @@
+name: ${project.name}
+main: me.Fupery.PlayerJobs.PlayerJobs
+version: ${project.version}
+description: ${project.description}
+depends: [Vault]
+author: Fupery
+commands:
+  jobs:
+    usage:  |
+      <command> define <x> <y> <z> : Defines the canvas region
+permissions:
+  playerjobs.employer:
+    description: Allows players to create jobs
+    default: op
+  playerjobs.override:
+    description: Allows players to delete jobs
+    default: op
+#  playerjobs.admin:
+#    description: Allows administrative commands
+#    children:
+#      playerjobs.employer: true
+#      playerjobs.admin: true
+#    default: op

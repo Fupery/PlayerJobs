@@ -1,0 +1,4 @@
+#PlayerJobs config
+#-----------------
+#prevent players from breaking job signs
+protect-signs: true
