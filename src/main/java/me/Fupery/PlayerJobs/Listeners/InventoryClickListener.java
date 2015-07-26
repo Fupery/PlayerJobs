@@ -50,11 +50,7 @@ public class InventoryClickListener implements Listener {
                 if (event.getCursor().getType() != Material.AIR) {
 
                     if (event.getCurrentItem() == null) {
-                        event.setCancelled(false);
-
-                        if (!menu.addButton(event.getCursor(), event.getSlot())) {
-                            event.setCancelled(true);
-                        }
+                        menu.addButton(event.getCursor(), event.getSlot());
                     }
 
                 } else {
