@@ -129,7 +129,6 @@ public class PlayerJobs extends JavaPlugin {
                             new FileInputStream(file));
                     o = in.readObject();
                     in.close();
-                    getLogger().info(o.toString());
 
                 } catch (IOException | ClassNotFoundException e) {
                     o = null;
@@ -137,9 +136,7 @@ public class PlayerJobs extends JavaPlugin {
 
                 if (o != null) {
                     Job job = Job.deserialize(this, (HashMap<String, Object>) o);
-                    getLogger().info(job.toString());
                     jobList.put(location, job);
-                    getLogger().info(jobList.get(location).toString());
                     return job;
                 }
             }

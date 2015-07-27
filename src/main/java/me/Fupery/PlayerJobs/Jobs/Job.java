@@ -9,11 +9,14 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -34,12 +37,13 @@ public class Job {
     private Inventory inventory;
     private HashMap<Material, Double> filter;
 
-    public Job(PlayerJobs plugin, Player player) {
+    public Job(PlayerJobs plugin, OfflinePlayer player) {
+        JobInventoryHolder holder = new JobInventoryHolder(plugin, player);
         this.plugin = plugin;
         employer = player.getUniqueId();
         employees = new UUID[9];
         balance = 0;
-        inventory = Bukkit.createInventory(player,
+        inventory = Bukkit.createInventory(holder,
                 InventoryType.CHEST, Formatting.inventoryHeading);
         filter = new HashMap<>();
     }
@@ -142,7 +146,7 @@ public class Job {
             plugin.getOpenMenus().put(player, new MenuHandler(plugin, this, MenuType.SETTINGS));
 
         } else if (isEmployee(player)) {
-            dump(player);
+            ;
 
         } else {
             if (addEmployee(player)) {
@@ -194,9 +198,6 @@ public class Job {
         }
         return false;
     }
-    private void dump (Player player) {
-
-    }
 
     public HashMap<String, Object> serialize () {
         HashMap<String, Object> map = new HashMap<>();
@@ -209,7 +210,7 @@ public class Job {
     }
 
     public static Job deserialize (PlayerJobs plugin, HashMap<String, Object> map) {
-        Job job = new Job(plugin, Bukkit.getPlayer(((UUID) map.get("employer"))));
+        Job job = new Job(plugin, Bukkit.getOfflinePlayer(((UUID) map.get("employer"))));
         job.setBalance(((double) map.get("balance")));
         job.setEmployees((UUID[]) map.get("employees"));
         job.getInventory().setContents(deSerializeInv(( map.get("inventory"))));
@@ -296,4 +297,28 @@ public class Job {
         this.filter = filter;
     }
 
+}
+class JobInventoryHolder implements InventoryHolder {
+
+    private PlayerJobs plugin;
+    private OfflinePlayer player;
+    private Inventory inventory;
+
+    JobInventoryHolder(PlayerJobs plugin, OfflinePlayer player) {
+        this.plugin = plugin;
+        this.player = player;
+    }
+
+    @Override
+    public Inventory getInventory() {
+
+        if (plugin.getServer().getOnlinePlayers().contains(player)) {
+            return ((Player) player).getInventory();
+        }
+        return inventory;
+    }
+
+    public void setInventory (Inventory inventory) {
+        this.inventory = inventory;
+    }
 }
