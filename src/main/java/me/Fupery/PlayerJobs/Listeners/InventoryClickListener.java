@@ -71,6 +71,8 @@ public class InventoryClickListener implements Listener {
                         if (event.getClick() == ClickType.DROP) {
                             menu.click(event);
                         }
+                    } else if (event.getInventory().getTitle().equals(Formatting.inventoryHeading)) {
+                        event.setCancelled(false);
                     }
                 }
             }

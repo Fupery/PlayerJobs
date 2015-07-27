@@ -61,7 +61,6 @@ public class PlayerJobs extends JavaPlugin {
         }
         if (jobList.size() > 0) {
             for (Location location : jobList.keySet()) {
-                getLogger().info("saving" + location.toString());
                 saveJob(location);
             }
         }
@@ -132,11 +131,9 @@ public class PlayerJobs extends JavaPlugin {
 
                 } catch (IOException | ClassNotFoundException e) {
                     o = null;
-                    getLogger().info("o is totes null");
                 }
 
                 if (o != null) {
-                    getLogger().info("file found and stuff");
                     Job job = Job.deserialize(this, (HashMap<String, Object>) o);
                     getLogger().info(job.toString());
                     jobList.put(location, job);
@@ -144,7 +141,6 @@ public class PlayerJobs extends JavaPlugin {
                     return job;
                 }
             }
-            getLogger().info("no file found");
         }
         return null;
     }
@@ -155,7 +151,6 @@ public class PlayerJobs extends JavaPlugin {
             File file = new File(data, getTag(location));
 
             try {
-                getLogger().info("saving file");
 
                 if (!file.exists()) {
                     file.createNewFile();
@@ -166,8 +161,7 @@ public class PlayerJobs extends JavaPlugin {
                 out.close();
 
             } catch (IOException e) {
-                getLogger().info("file not written D:");
-                e.printStackTrace();
+                getLogger().info("IOException when saving " + getTag(location));
                 return;
             }
         }

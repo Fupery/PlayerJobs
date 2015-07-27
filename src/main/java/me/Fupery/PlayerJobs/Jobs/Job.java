@@ -73,10 +73,11 @@ public class Job {
                 if (filter.containsKey(item.getType())) {
                     int amount = item.getAmount();
                     double wage;
+                    HashMap<Integer, ItemStack> leftover = null;
 
                     if (inventory.firstEmpty() == -1) {
 
-                        HashMap<Integer, ItemStack> leftover = inventory.addItem(item);
+                        leftover = inventory.addItem(item);
 
                         if (leftover != null) {
 
@@ -101,7 +102,13 @@ public class Job {
                         ItemStack inHand = player.getItemInHand();
 
                         if (inHand.getAmount() == amount) {
-                            player.setItemInHand(null);
+
+                            if (leftover == null) {
+                                player.setItemInHand(null);
+
+                            } else {
+                                player.setItemInHand(leftover.get(0));
+                            }
 
                         } else {
                             inHand.setAmount(player.getItemInHand().getAmount() - amount);
