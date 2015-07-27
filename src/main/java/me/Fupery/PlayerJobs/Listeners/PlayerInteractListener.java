@@ -23,8 +23,10 @@ public class PlayerInteractListener implements Listener {
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
 
-        if (block != null && (block.getType().equals(Material.SIGN_POST)
+        if (block != null
+                && (block.getType().equals(Material.SIGN_POST)
                 || block.getType().equals(Material.WALL_SIGN))) {
+
             Sign sign = ((Sign) block.getState());
 
             if (sign.getLine(0).equals(Formatting.signFormat)) {
@@ -34,12 +36,16 @@ public class PlayerInteractListener implements Listener {
                     return;
                 }
                 switch (event.getAction()) {
+
                     case LEFT_CLICK_BLOCK:
                         job.onLeftCLick(event);
                         break;
+
                     case RIGHT_CLICK_BLOCK:
+
                         if (event.getPlayer().isSneaking()) {
                             job.onShiftRightClick(event);
+
                         } else {
                             job.onRightClick(event);
                         }

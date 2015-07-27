@@ -1,6 +1,8 @@
 package me.Fupery.PlayerJobs.Listeners;
 
 import me.Fupery.PlayerJobs.JobUI.AbstractMenu;
+import me.Fupery.PlayerJobs.JobUI.SubMenus.JobMenu;
+import me.Fupery.PlayerJobs.JobUI.SubMenus.MenuEmployees;
 import me.Fupery.PlayerJobs.JobUI.SubMenus.MenuFilter;
 import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
@@ -26,47 +28,51 @@ public class InventoryClickListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory inventory = event.getClickedInventory();
 
-        if (inventory != null && inventory.getTitle() != null) {
-            String title = inventory.getTitle();
+        if (inventory != null) {
+            String title = inventory.getTitle().substring(2, 7);
 
-            if (title.equals(Formatting.menuHeading)
-                    || title.equals(Formatting.logMenuHeading)) {
+            if (title.equals("[Job]")) {
 
                 event.setCancelled(true);
                 Player player = ((Player) event.getWhoClicked());
 
                 if (plugin.getOpenMenus().containsKey(player)) {
-                    AbstractMenu menu = plugin.getOpenMenus().get(
-                            player).getMenu(inventory);
-                    menu.click(event);
-                }
 
-            } else if (title.equals(Formatting.filterMenuHeading)) {
+                    AbstractMenu menu =
+                            plugin.getOpenMenus().get(player).getMenu(inventory);
 
-                event.setCancelled(true);
-                MenuFilter menu = (MenuFilter) plugin.getOpenMenus().get(
-                        ((Player) event.getWhoClicked())).getMenu(inventory);
+                    if (menu instanceof JobMenu) {
 
-                if (event.getCursor().getType() != Material.AIR) {
+                        menu.click(event);
 
-                    if (event.getCurrentItem() == null) {
-                        menu.addButton(event.getCursor(), event.getSlot());
-                    }
+                    } else if (menu instanceof MenuFilter) {
 
-                } else {
+                        if (event.getCursor().getType() != Material.AIR) {
 
-                    if (event.getCurrentItem() != null) {
+                            if (event.getCurrentItem() == null) {
+                                ((MenuFilter) menu).addButton(
+                                        event.getCursor(), event.getSlot());
+                            }
+
+                        } else {
+
+                            if (event.getCurrentItem() != null) {
+
+                                if (event.getClick() == ClickType.DROP) {
+                                    ((MenuFilter) menu).delButton(event.getSlot());
+                                }
+                                menu.click(event);
+                            }
+
+                        }
+
+                    } else if (menu instanceof MenuEmployees) {
 
                         if (event.getClick() == ClickType.DROP) {
-                            menu.delButton(event.getSlot());
+                            menu.click(event);
                         }
-                        menu.click(event);
                     }
-
                 }
-
-            } else if (title.equals(Formatting.employeeMenuHeading)) {
-                event.setCancelled(true);
             }
         }
     }

@@ -6,6 +6,7 @@ import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -233,6 +234,12 @@ public class Job {
             }
         }
         return items;
+    }
+
+    public void onBreak (Location location) {
+        PlayerJobs.getEconomy().depositPlayer(Bukkit.getOfflinePlayer(
+                employer), balance);
+        plugin.deleteJob(location);
     }
 
     public PlayerJobs getPlugin() {

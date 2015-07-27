@@ -1,6 +1,10 @@
 package me.Fupery.PlayerJobs.Listeners;
 
+import me.Fupery.PlayerJobs.JobUI.AbstractMenu;
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
+import me.Fupery.PlayerJobs.JobUI.SubMenus.JobMenu;
+import me.Fupery.PlayerJobs.JobUI.SubMenus.MenuEmployees;
+import me.Fupery.PlayerJobs.JobUI.SubMenus.MenuFilter;
 import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
 import org.bukkit.Bukkit;
@@ -20,37 +24,42 @@ public class InventoryCloseListener implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
 
-        Player player = ((Player) event.getPlayer());
+        String title = event.getInventory().getTitle().substring(2, 7);
 
-        if (plugin.getOpenMenus().containsKey(player)) {
+        if (title.equals("[Job]")) {
 
-            String title = event.getInventory().getTitle();
-            final MenuHandler handler = plugin.getOpenMenus().get(player);
+            Player player = ((Player) event.getPlayer());
 
-            if (title.equals(Formatting.menuHeading)) {
-                handler.closeRoot();
+            if (plugin.getOpenMenus().containsKey(player)) {
+                AbstractMenu menu =
+                        plugin.getOpenMenus().get(player).getMenu(event.getInventory());
 
-            } else if (title.equals(Formatting.inventoryHeading)) {
-                handler.closeInv();
-                Bukkit.getScheduler().runTask(plugin, new Runnable() {
-                    @Override
-                    public void run() {
-                        handler.openRoot();
-                    }
-                });
+                final MenuHandler handler = plugin.getOpenMenus().get(player);
 
-            } else if (title.equals(Formatting.employeeMenuHeading)
-                    || title.equals(Formatting.logMenuHeading)
-                    || title.equals(Formatting.filterMenuHeading)) {
+                if (menu instanceof JobMenu) {
+                    handler.closeRoot();
 
-                handler.closeBranch();
+                } else if (event.getInventory().getTitle().equals(Formatting.inventoryHeading)) {
+                    handler.closeInv();
+                    Bukkit.getScheduler().runTask(plugin, new Runnable() {
+                        @Override
+                        public void run() {
+                            handler.openRoot();
+                        }
+                    });
 
-                Bukkit.getScheduler().runTask(plugin, new Runnable() {
-                    @Override
-                    public void run() {
-                        handler.openRoot();
-                    }
-                });
+                } else if (menu instanceof MenuEmployees
+                        || menu instanceof MenuFilter) {
+
+                    handler.closeBranch();
+
+                    Bukkit.getScheduler().runTask(plugin, new Runnable() {
+                        @Override
+                        public void run() {
+                            handler.openRoot();
+                        }
+                    });
+                }
             }
         }
     }

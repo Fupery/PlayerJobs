@@ -2,9 +2,11 @@ package me.Fupery.PlayerJobs.IO;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.SignChangeEvent;
 
 public class Utils {
 
@@ -48,4 +50,22 @@ public class Utils {
             tail = "]}}}\"}}",
             trail = "]";
 
+    public static int[] getChest (SignChangeEvent event) {
+
+        for (int x = -1; x < 2; x++) {
+
+            for (int z = -1; z < 2; z ++) {
+                Location l = event.getBlock().getLocation().add(x, 0, z);
+
+                if (l.getBlock() != null &&
+                        l.getBlock().getType().equals(Material.CHEST)) {
+
+                    int[] disp = new int[2];
+                    disp[0] = x; disp[1] = z;
+                    return disp;
+                }
+            }
+        }
+        return null;
+    }
 }

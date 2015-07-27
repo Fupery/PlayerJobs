@@ -2,6 +2,7 @@ package me.Fupery.PlayerJobs.JobUI.Buttons;
 
 import me.Fupery.PlayerJobs.JobUI.AbstractMenu;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class ButtonToken extends AbstractButton {
@@ -17,7 +18,7 @@ public class ButtonToken extends AbstractButton {
 
     @Override
     public void onInventoryClick(AbstractMenu menu, InventoryClickEvent event) {
-        if (doesToggle && event.isRightClick()) {
+        if (doesToggle && event.getClick() == ClickType.DROP) {
             boolean deleted = (boolean) returnValue;
             returnValue = !deleted;
             int i = ((boolean) returnValue) ? 0 : 1;

@@ -34,6 +34,7 @@ public class PlayerJobs extends JavaPlugin {
 
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new BlockBreakListener(this), this);
+        manager.registerEvents(new BlockPhysicsListener(this), this);
         manager.registerEvents(new InventoryClickListener(this), this);
         manager.registerEvents(new InventoryDragListener(this), this);
         manager.registerEvents(new InventoryCloseListener(this), this);

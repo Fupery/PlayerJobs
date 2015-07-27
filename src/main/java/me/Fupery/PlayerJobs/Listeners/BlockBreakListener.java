@@ -49,9 +49,7 @@ public class BlockBreakListener implements Listener {
                         return;
                     }
                 }
-                PlayerJobs.getEconomy().depositPlayer(Bukkit.getOfflinePlayer(
-                        job.getEmployer()), job.getBalance());
-                plugin.deleteJob(block.getLocation());
+                job.onBreak(event.getBlock().getLocation());
             }
         }
     }

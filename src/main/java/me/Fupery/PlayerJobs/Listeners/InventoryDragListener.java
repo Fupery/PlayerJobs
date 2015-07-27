@@ -21,6 +21,7 @@ public class InventoryDragListener implements Listener {
         if (title.equals(Formatting.menuHeading)
                 || title.equals(Formatting.employeeMenuHeading)
                 || title.equals(Formatting.filterMenuHeading)) {
+
             event.setCancelled(true);
         }
 
