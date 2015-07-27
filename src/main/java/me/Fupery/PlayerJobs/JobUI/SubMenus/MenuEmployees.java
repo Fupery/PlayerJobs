@@ -8,6 +8,7 @@ import me.Fupery.PlayerJobs.Utils.Formatting;
 import org.bukkit.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -41,7 +42,7 @@ public class MenuEmployees extends AbstractMenu {
 
             if (employees[i] != null) {
 
-                Player p = Bukkit.getPlayer(employees[i]);
+                OfflinePlayer p = Bukkit.getOfflinePlayer(employees[i]);
 
                 buttons[i] = new ButtonToken(this, new String[] {
                         ChatColor.GREEN + p.getName(), "Is ok I guess"
@@ -79,7 +80,7 @@ public class MenuEmployees extends AbstractMenu {
             }
         }
         ItemMeta meta = button.getItemMeta();
-        Player player = Bukkit.getPlayer(
+        OfflinePlayer player = Bukkit.getOfflinePlayer(
                 handler.getJob().getEmployees()[i]);
         if ((boolean) value) {
             String title = ChatColor.STRIKETHROUGH +

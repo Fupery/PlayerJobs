@@ -1,19 +1,14 @@
 package me.Fupery.PlayerJobs.JobUI.SubMenus;
 
+import me.Fupery.PlayerJobs.IO.JSONBuilder;
 import me.Fupery.PlayerJobs.JobUI.AbstractMenu;
-import me.Fupery.PlayerJobs.JobUI.Buttons.AbstractButton;
-import me.Fupery.PlayerJobs.JobUI.Buttons.ButtonCounter;
-import me.Fupery.PlayerJobs.JobUI.Buttons.ButtonInv;
-import me.Fupery.PlayerJobs.JobUI.Buttons.ButtonLink;
+import me.Fupery.PlayerJobs.JobUI.Buttons.*;
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
 import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import org.bukkit.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -67,11 +62,11 @@ public class JobMenu extends AbstractMenu {
                 ChatColor.YELLOW + "Right-click to fire an employee"},
                 Material.SKULL_ITEM, new MenuEmployees(handler));
 
-        buttons[3] = new ButtonLink(this, new String[]{
+        buttons[3] = new ButtonChat(this, new String[]{
                 ChatColor.GREEN + "Job Logs",
                 "Click to review the activity at",
                 "this job sign for the past week."},
-                Material.BOOK_AND_QUILL, new MenuLog(handler));
+                Material.BOOK_AND_QUILL);
 
         buttons[4] = new ButtonInv(this, new String[]{
                 ChatColor.GREEN + "Inventory",
@@ -109,6 +104,9 @@ public class JobMenu extends AbstractMenu {
             lore.set(0, ChatColor.GOLD + "- $" + value);
             meta.setLore(lore);
             button.setItemMeta(meta);
+
+        } else if (button instanceof ButtonChat) {
+            new JSONBuilder(handler.getPlugin(), handler.getPlayer());
         }
     }
 

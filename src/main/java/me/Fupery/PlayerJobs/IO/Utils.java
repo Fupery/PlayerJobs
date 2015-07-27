@@ -8,6 +8,9 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public class Utils {
 
     public static String getTag (Location location) {
@@ -68,4 +71,6 @@ public class Utils {
         }
         return null;
     }
+
+    public static final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 }

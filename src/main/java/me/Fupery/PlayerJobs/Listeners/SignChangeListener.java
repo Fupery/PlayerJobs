@@ -24,6 +24,7 @@ public class SignChangeListener implements Listener {
 
     @EventHandler
     public void onSignChangeEvent(SignChangeEvent event) {
+
         if (event.getLine(0).equals("[Job]")) {
             Player player = event.getPlayer();
             if (!player.hasPermission("playerjobs.employer")) {

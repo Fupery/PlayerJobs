@@ -1,5 +1,6 @@
 package me.Fupery.PlayerJobs.Jobs;
 
+import me.Fupery.PlayerJobs.IO.Transaction;
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
 import me.Fupery.PlayerJobs.JobUI.MenuType;
 import me.Fupery.PlayerJobs.PlayerJobs;
@@ -114,6 +115,8 @@ public class Job {
                             inHand.setAmount(player.getItemInHand().getAmount() - amount);
                             player.setItemInHand(inHand);
                         }
+                        new Transaction(plugin, employer, item.getType(), amount);
+
                         player.sendMessage(Formatting.playerMessage(String.format(
                                 "You were paid $%s for %s %s!",
                                 wage, amount, item.getType().name().toLowerCase())));
