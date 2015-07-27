@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Set;
 
 import static me.Fupery.PlayerJobs.IO.Utils.getTag;
 
@@ -59,8 +60,9 @@ public class PlayerJobs extends JavaPlugin {
                 openMenus.get(player).closeRoot();
             }
         }
-        if (jobList.size() > 0) {
-            for (Location location : jobList.keySet()) {
+        Set<Location> keys = jobList.keySet();
+         if (jobList.size() > 0) {
+            for (Location location : keys) {
                 saveJob(location);
             }
         }
