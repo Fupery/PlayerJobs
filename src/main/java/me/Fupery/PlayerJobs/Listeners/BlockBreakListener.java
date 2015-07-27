@@ -22,7 +22,7 @@ public class BlockBreakListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        //TODO - Refund player job balance on chest break
+
         Block block = event.getBlock();
 
         if (block.getType().equals(Material.SIGN_POST)

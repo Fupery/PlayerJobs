@@ -1,14 +1,9 @@
 package me.Fupery.PlayerJobs.Listeners;
 
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
-import me.Fupery.PlayerJobs.JobUI.MenuType;
 import me.Fupery.PlayerJobs.Jobs.Job;
 import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,7 +31,7 @@ public class SignChangeListener implements Listener {
             Job job = new Job(plugin, player);
             plugin.getJobList().put(event.getBlock().getLocation(), job);
             plugin.getOpenMenus().put(player,
-                    new MenuHandler(plugin, job, MenuType.SETTINGS));
+                    new MenuHandler(plugin, job));
         }
     }
 }

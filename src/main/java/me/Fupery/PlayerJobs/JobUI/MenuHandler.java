@@ -1,7 +1,6 @@
 package me.Fupery.PlayerJobs.JobUI;
 
 import me.Fupery.PlayerJobs.JobUI.SubMenus.JobMenu;
-import me.Fupery.PlayerJobs.JobUI.SubMenus.MenuDump;
 import me.Fupery.PlayerJobs.Jobs.Job;
 import me.Fupery.PlayerJobs.PlayerJobs;
 import org.bukkit.Bukkit;
@@ -15,14 +14,12 @@ public class MenuHandler {
     private Player player;
     private AbstractMenu root;
     private AbstractMenu branch;
-    private MenuType menuType;
 
     private boolean branching;
 
-    public MenuHandler(PlayerJobs plugin, Job job, MenuType menuType) {
+    public MenuHandler(PlayerJobs plugin, Job job) {
         this.job = job;
         this.plugin = plugin;
-        this.menuType = menuType;
         player = Bukkit.getPlayer(job.getEmployer());
         branching = false;
         openRoot();
@@ -30,13 +27,8 @@ public class MenuHandler {
 
     public void openRoot() {
 
-        if (menuType == MenuType.SETTINGS) {
-            root = new JobMenu(this);
-
-        } else if (menuType == MenuType.DUMP) {
-            root = new MenuDump(this);
-        }
-            root.open();
+        root = new JobMenu(this);
+        root.open();
     }
 
     public void openBranch(AbstractMenu menu) {
