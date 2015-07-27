@@ -2,26 +2,19 @@ package me.Fupery.PlayerJobs.Jobs;
 
 import me.Fupery.PlayerJobs.IO.Transaction;
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
-import me.Fupery.PlayerJobs.JobUI.MenuType;
 import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.Serializable;
-import java.text.Format;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +38,7 @@ public class Job {
         balance = 0;
         inventory = Bukkit.createInventory(holder,
                 InventoryType.CHEST, Formatting.inventoryHeading);
+        holder.setInventory(inventory);
         filter = new HashMap<>();
     }
 
@@ -68,7 +62,7 @@ public class Job {
         Player player = event.getPlayer();
 
         if (player.getUniqueId().equals(employer)) {
-            plugin.getOpenMenus().put(player, new MenuHandler(plugin, this, MenuType.SETTINGS));
+            plugin.getOpenMenus().put(player, new MenuHandler(plugin, this));
 
         } else if (isEmployee(player)) {
             ItemStack item = player.getItemInHand();
@@ -143,7 +137,7 @@ public class Job {
         Player player = event.getPlayer();
 
         if (player.getUniqueId().equals(employer)) {
-            plugin.getOpenMenus().put(player, new MenuHandler(plugin, this, MenuType.SETTINGS));
+            plugin.getOpenMenus().put(player, new MenuHandler(plugin, this));
 
         } else if (isEmployee(player)) {
             ;
@@ -248,9 +242,21 @@ public class Job {
     }
 
     public void onBreak (Location location) {
-        PlayerJobs.getEconomy().depositPlayer(Bukkit.getOfflinePlayer(
-                employer), balance);
+
+        OfflinePlayer player = Bukkit.getOfflinePlayer(employer);
+        PlayerJobs.getEconomy().depositPlayer(player, balance);
         plugin.deleteJob(location);
+
+        if (plugin.getServer().getOnlinePlayers().contains(player)) {
+            ((Player) player).sendMessage( new String[] {
+                    Formatting.playerMessage(String.format(
+                            "Your job sign at [%s, %s, %s] has been destroyed",
+                            location.getX(), location.getY(), location.getZ())),
+                    Formatting.playerMessage(
+                            String.format("Added %s to your balance", balance))
+            });
+
+        }
     }
 
     public PlayerJobs getPlugin() {
