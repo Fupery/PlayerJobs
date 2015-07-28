@@ -25,6 +25,7 @@ public class SignChangeListener implements Listener {
             if (!player.hasPermission("playerjobs.employer")) {
                 player.sendMessage(Formatting.playerMessage(
                         "You don't have permission to create a Job!"));
+                event.setLine(0, "[Nope]");
                 return;
             }
             event.setLine(0, Formatting.signFormat);

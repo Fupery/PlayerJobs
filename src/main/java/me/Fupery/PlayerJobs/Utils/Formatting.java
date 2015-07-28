@@ -8,7 +8,6 @@ public class Formatting {
             menuHeading = "§1[Job] Settings Menu",
             filterMenuHeading = "§3[Job] Filter Place items below",
             employeeMenuHeading = "§9[Job] Employees Q/drop to fire",
-            logMenuHeading = "Logs for the past seven days",
             inventoryHeading = "§5[Job] inventory",
             signFormat = String.format("%s[%sJob%s]", ChatColor.DARK_BLUE,
                     ChatColor.BLUE, ChatColor.DARK_BLUE);
