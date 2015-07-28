@@ -1,5 +1,6 @@
 package me.Fupery.PlayerJobs.Listeners;
 
+import me.Fupery.PlayerJobs.IO.NBTTestClass;
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
 import me.Fupery.PlayerJobs.Jobs.Job;
 import me.Fupery.PlayerJobs.PlayerJobs;
@@ -8,6 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+
+import java.io.File;
+import java.io.IOException;
 
 public class SignChangeListener implements Listener {
 
@@ -33,6 +37,12 @@ public class SignChangeListener implements Listener {
             plugin.getJobList().put(event.getBlock().getLocation(), job);
             plugin.getOpenMenus().put(player,
                     new MenuHandler(plugin, job));
+        } else if (event.getLine(0).equals("test")) {
+            try {
+                NBTTestClass.saveNBT();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
