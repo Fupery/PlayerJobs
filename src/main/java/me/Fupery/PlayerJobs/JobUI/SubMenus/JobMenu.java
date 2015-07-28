@@ -13,7 +13,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.ItemMeta;
-import sun.plugin2.main.server.Plugin;
 
 import java.util.List;
 import java.util.UUID;
