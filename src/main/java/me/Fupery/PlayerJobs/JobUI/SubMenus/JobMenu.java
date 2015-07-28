@@ -13,6 +13,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.ItemMeta;
+import sun.plugin2.main.server.Plugin;
 
 import java.util.List;
 import java.util.UUID;
@@ -114,24 +115,26 @@ public class JobMenu extends AbstractMenu {
 
     @Override
     public void close() {
-        handler.getJob().setBalance(((double) buttons[1].getReturnValue()));
-        handler.getJob().roundBalance();
-        double d = handler.getJob().getBalance() - initialBal;
-        EconomyResponse r;
-        String s;
-        if (d < 0) {
-            PlayerJobs.getEconomy().depositPlayer(handler.getPlayer(), -d);
-            s = "withdrew %s%s from";
-        } else {
-            PlayerJobs.getEconomy().withdrawPlayer(handler.getPlayer(), d);
-            s = "deposited %s%s into";
-        }
+        if (PlayerJobs.getEconomy() != null) {
+            handler.getJob().setBalance(((double) buttons[1].getReturnValue()));
+            handler.getJob().roundBalance();
+            double d = handler.getJob().getBalance() - initialBal;
+            EconomyResponse r;
+            String s;
+            if (d < 0) {
+                PlayerJobs.getEconomy().depositPlayer(handler.getPlayer(), -d);
+                s = "withdrew %s%s from";
+            } else {
+                PlayerJobs.getEconomy().withdrawPlayer(handler.getPlayer(), d);
+                s = "deposited %s%s into";
+            }
 
-        if (d != 0 && !handler.isBranching()) {
-            double t = (d > 0) ? d : -d;
-            handler.getPlayer().sendMessage(Formatting.playerMessage(
-                    String.format("Successfully " + s + " your job",
-                            ChatColor.GOLD + "$" + t, ChatColor.GRAY)));
+            if (d != 0 && !handler.isBranching()) {
+                double t = (d > 0) ? d : -d;
+                handler.getPlayer().sendMessage(Formatting.playerMessage(
+                        String.format("Successfully " + s + " your job",
+                                ChatColor.GOLD + "$" + t, ChatColor.GRAY)));
+            }
         }
     }
 }

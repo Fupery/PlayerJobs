@@ -158,7 +158,7 @@ public class Job {
                 round = Math.round(round * 100);
                 wage = round / 100;
 
-                if (balance >= wage) {
+                if (balance >= wage && PlayerJobs.getEconomy() != null) {
 
                     PlayerJobs.getEconomy().depositPlayer(player, wage);
                     balance -= wage;

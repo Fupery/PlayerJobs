@@ -46,6 +46,7 @@ public class PlayerJobs extends JavaPlugin {
 
         if (!setupEconomy()) {
             getLogger().warning("Economy not found, disabling plugin.");
+            manager.disablePlugin(this);
         }
 
         setupRegistry();
