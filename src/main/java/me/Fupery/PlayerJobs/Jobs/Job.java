@@ -31,14 +31,14 @@ public class Job {
     private HashMap<Material, Double> filter;
 
     public Job(PlayerJobs plugin, OfflinePlayer player) {
-        JobInventoryHolder holder = new JobInventoryHolder(plugin, player);
+//        JobInventoryHolder holder = new JobInventoryHolder(plugin, player);
         this.plugin = plugin;
         employer = player.getUniqueId();
         employees = new UUID[9];
         balance = 0;
-        inventory = Bukkit.createInventory(holder,
+        inventory = Bukkit.createInventory((Player) player,
                 InventoryType.CHEST, Formatting.inventoryHeading);
-        holder.setInventory(inventory);
+//        holder.setInventory(inventory);
         filter = new HashMap<>();
     }
 
@@ -65,67 +65,9 @@ public class Job {
             plugin.getOpenMenus().put(player, new MenuHandler(plugin, this));
 
         } else if (isEmployee(player)) {
+
             ItemStack item = player.getItemInHand();
-
-            if (item != null && item.getType() != Material.AIR) {
-
-                if (filter.containsKey(item.getType())) {
-                    int amount = item.getAmount();
-                    double wage;
-                    HashMap<Integer, ItemStack> leftover = null;
-
-                    if (inventory.firstEmpty() == -1) {
-
-                        leftover = inventory.addItem(item);
-
-                        if (leftover != null) {
-
-                            if (leftover.get(0).getAmount() == amount) {
-                                player.sendMessage(Formatting.playerMessage(
-                                        "This job inventory is full! Try again later."));
-                                return;
-
-                            } else {
-                                amount -= leftover.get(0).getAmount();
-                            }
-                        }
-                    }
-                    wage = getWage(item.getType(), amount);
-
-                    if (balance >= wage) {
-
-                        PlayerJobs.getEconomy().depositPlayer(player, wage);
-                        balance -= wage;
-                        inventory.addItem(item);
-
-                        ItemStack inHand = player.getItemInHand();
-
-                        if (inHand.getAmount() == amount) {
-
-                            if (leftover == null) {
-                                player.setItemInHand(null);
-
-                            } else {
-                                player.setItemInHand(leftover.get(0));
-                            }
-
-                        } else {
-                            inHand.setAmount(player.getItemInHand().getAmount() - amount);
-                            player.setItemInHand(inHand);
-                        }
-                        new Transaction(plugin, employer, item.getType(), amount);
-
-                        player.sendMessage(Formatting.playerMessage(String.format(
-                                "You were paid $%s for %s %s!",
-                                wage, amount, item.getType().name().toLowerCase())));
-
-                    } else {
-                        player.sendMessage(Formatting.playerMessage(String.format(
-                                "This job doesn't have enough money to buy %s %s for $%s!",
-                                item.getAmount(), item.getType().name().toLowerCase(), wage)));
-                    }
-                }
-            }
+                dump(item, player);
         } else {
             player.sendMessage(Formatting.playerMessage(
                     "Shift & Right-Click to apply for this job"));
@@ -140,7 +82,7 @@ public class Job {
             plugin.getOpenMenus().put(player, new MenuHandler(plugin, this));
 
         } else if (isEmployee(player)) {
-            ;
+            dump(event.getItem(), player);
 
         } else {
             if (addEmployee(player)) {
@@ -153,14 +95,102 @@ public class Job {
             }
         }
     }
-    private double getWage (Material type, int amount) {
-        double wage = (filter.get(type)/64) * amount;
-        int round = ((int) (wage * 100));
-        return ((double) round) / 100;
+
+    private void dump (ItemStack item, Player player) {
+
+        if (item != null && item.getType() != Material.AIR) {
+
+            if (filter != null && filter.containsKey(item.getType())) {
+
+                double wage;
+                int remainder = depositItems(item);
+                int amountDeposited = item.getAmount() - remainder;
+
+                if (amountDeposited == 0) {
+                    player.sendMessage(Formatting.playerMessage(
+                            "This job inventory is full! Try again later."));
+                    return;
+                }
+
+                double round = (filter.get(item.getType()) / 64) * amountDeposited;
+                round = Math.round(round * 100);
+                wage = round / 100;
+
+                if (balance >= wage) {
+
+                    PlayerJobs.getEconomy().depositPlayer(player, wage);
+                    balance -= wage;
+                    roundBalance();
+                    inventory.addItem(item);
+
+                    if (remainder == 0) {
+
+                        player.setItemInHand(null);
+
+                    } else {
+                        ItemStack remainingItems = new ItemStack(item);
+                        remainingItems.setAmount(remainder);
+                        player.setItemInHand(remainingItems);
+                    }
+                    ItemStack deposit = new ItemStack(item);
+                    deposit.setAmount(amountDeposited);
+                    inventory.addItem(deposit);
+
+                    new Transaction(plugin, employer, item.getType(), amountDeposited);
+
+                    player.sendMessage(Formatting.playerMessage(String.format(
+                            "You were paid $%s for %s %s!",
+                            wage, amountDeposited, item.getType().name().toLowerCase())));
+
+                } else {
+                    player.sendMessage(Formatting.playerMessage(String.format(
+                            "This job doesn't have enough money to buy %s %s for $%s!",
+                            item.getAmount(), item.getType().name().toLowerCase(), wage)));
+                }
+            }
+        }
     }
+    public int depositItems (ItemStack item) {
+
+        int amountToDeposit = item.getAmount();
+
+        for (ItemStack i : inventory) {
+
+            if (i == null) {
+                amountToDeposit = 0;
+                break;
+
+            } else if (i.getType().equals(item.getType())) {
+                int amount = i.getAmount();
+
+                if (amount < 64) {
+                    int freeSpaceInSlot = 64 - amount;
+
+                    if (freeSpaceInSlot > amountToDeposit) {
+                        amountToDeposit = 0;
+                        break;
+
+                    } else {
+                        i.setAmount(64);
+                        amountToDeposit -= freeSpaceInSlot;
+                    }
+                }
+            }
+        }
+        return amountToDeposit;
+    }
+
+    public void roundBalance() {
+        double round = balance;
+        round = Math.round(round * 100);
+        balance = round / 100;
+    }
+
     public void organizeEmployees() {
+
         UUID[] sort = new UUID[employees.length];
         int k = 0;
+
         for (UUID id : employees) {
             if (id != null) {
                 sort[k] = id;
@@ -184,7 +214,9 @@ public class Job {
         return false;
     }
     private boolean addEmployee(Player player) {
+
         for (int i = 0; i < employees.length; i ++) {
+
             if (employees[i] == null) {
                 employees[i] = player.getUniqueId();
                 return true;
@@ -218,8 +250,10 @@ public class Job {
         Object[] tags = new Object[items.length];
 
         for (int i = 0; i < items.length; i ++) {
+
             if (items[i] != null) {
                 tags[i] = items[i].serialize();
+
             } else {
                 tags[i] = null;
             }
@@ -232,8 +266,11 @@ public class Job {
         ItemStack[] items = new ItemStack[tags.length];
 
         for (int i = 0; i < items.length; i ++) {
+
             if (tags[i] != null) {
+
                 items[i] = ItemStack.deserialize(((HashMap<String, Object>) tags[i]));
+
             } else {
                 items[i] = null;
             }
@@ -248,14 +285,14 @@ public class Job {
         plugin.deleteJob(location);
 
         if (plugin.getServer().getOnlinePlayers().contains(player)) {
+
             ((Player) player).sendMessage( new String[] {
+
                     Formatting.playerMessage(String.format(
                             "Your job sign at [%s, %s, %s] has been destroyed",
                             location.getX(), location.getY(), location.getZ())),
                     Formatting.playerMessage(
-                            String.format("Added %s to your balance", balance))
-            });
-
+                            String.format("Added %s to your balance", balance))});
         }
     }
 

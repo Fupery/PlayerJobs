@@ -113,7 +113,8 @@ public class JobMenu extends AbstractMenu {
     @Override
     public void close() {
         handler.getJob().setBalance(((double) buttons[1].getReturnValue()));
-        double d = ((double) buttons[1].getReturnValue()) - initialBal;
+        handler.getJob().roundBalance();
+        double d = handler.getJob().getBalance() - initialBal;
         EconomyResponse r;
         String s;
         if (d < 0) {
