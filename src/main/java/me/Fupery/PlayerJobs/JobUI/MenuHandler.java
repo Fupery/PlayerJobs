@@ -46,8 +46,12 @@ public class MenuHandler {
     }
 
     public void closeBranch() {
+
         branching = false;
-        branch.close();
+        
+        if (branch != null) {
+            branch.close();
+        }
         branch = null;
     }
 
