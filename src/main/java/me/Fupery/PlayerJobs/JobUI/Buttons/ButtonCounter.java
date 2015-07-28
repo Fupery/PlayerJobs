@@ -35,22 +35,24 @@ public class ButtonCounter extends AbstractButton {
 
     @Override
     public void onInventoryClick(AbstractMenu menu, InventoryClickEvent event) {
-        double i = 0, j = ((double) returnValue);
+        double valueToAdd = 0, currentValue = ((double) returnValue);
 
-        if (event.isLeftClick()) {
-            i = increment;
+        valueToAdd = (event.isShiftClick()) ? increment * 10 : increment;
 
-        } else if (event.isRightClick()) {
+        if (event.isRightClick()) {
 
-            if (j > 0) {
-                i = -increment;
+            double i = valueToAdd;
+            valueToAdd = -i;
+
+            if (currentValue + valueToAdd < 0) {
+                return;
             }
         }
 
-        if (hasMax && ((i + j) - initialAmount > maxDeposit)) {
+        if (hasMax && ((valueToAdd + currentValue) - initialAmount > maxDeposit)) {
             return;
         }
-        returnValue = i + j;
+        returnValue = valueToAdd + currentValue;
         menu.passValues(this, returnValue);
         menu.update(this);
     }

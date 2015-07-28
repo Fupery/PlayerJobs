@@ -52,7 +52,8 @@ public class JobMenu extends AbstractMenu {
                 "Money will be payed to your",
                 "employees from your job balance.",
                 ChatColor.YELLOW + "Left-click to deposit money,",
-                ChatColor.YELLOW + "Right-click to retrieve money"},
+                ChatColor.YELLOW + "Right-click to retrieve money",
+                ChatColor.GOLD + "Hold shift to deposit more"},
                 Material.EMERALD, handler.getJob().getBalance(), 10,
                 playerBalance, false, true);
 
