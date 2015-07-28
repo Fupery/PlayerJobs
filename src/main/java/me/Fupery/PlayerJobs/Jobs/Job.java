@@ -121,7 +121,6 @@ public class Job {
                     PlayerJobs.getEconomy().depositPlayer(player, wage);
                     balance -= wage;
                     roundBalance();
-                    inventory.addItem(item);
 
                     if (remainder == 0) {
 
@@ -150,34 +149,35 @@ public class Job {
             }
         }
     }
+    // Iterates through inventory and checks if there is room for
+    // The itemstack in the player's hand - returns the remainder
     public int depositItems (ItemStack item) {
 
-        int amountToDeposit = item.getAmount();
+        int amountLeftToDeposit = item.getAmount();
 
         for (ItemStack i : inventory) {
 
             if (i == null) {
-                amountToDeposit = 0;
+                amountLeftToDeposit = 0;
                 break;
 
             } else if (i.getType().equals(item.getType())) {
-                int amount = i.getAmount();
+                int amountInSlot = i.getAmount();
 
-                if (amount < 64) {
-                    int freeSpaceInSlot = 64 - amount;
+                if (amountInSlot < 64) {
+                    int freeSpaceInSlot = 64 - amountInSlot;
 
-                    if (freeSpaceInSlot > amountToDeposit) {
-                        amountToDeposit = 0;
+                    if (freeSpaceInSlot > amountLeftToDeposit) {
+                        amountLeftToDeposit = 0;
                         break;
 
                     } else {
-                        i.setAmount(64);
-                        amountToDeposit -= freeSpaceInSlot;
+                        amountLeftToDeposit -= freeSpaceInSlot;
                     }
                 }
             }
         }
-        return amountToDeposit;
+        return amountLeftToDeposit;
     }
 
     public void roundBalance() {
