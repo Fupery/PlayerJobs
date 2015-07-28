@@ -17,7 +17,6 @@ import static me.Fupery.PlayerJobs.IO.Utils.dateFormat;
 public class Transaction extends BukkitRunnable {
 
     private File file;
-    private FileConfiguration log;
     private Material item;
     private int amount;
     private String date;
@@ -45,7 +44,7 @@ public class Transaction extends BukkitRunnable {
                 return;
             }
         }
-        log = YamlConfiguration.loadConfiguration(file);
+        FileConfiguration log = YamlConfiguration.loadConfiguration(file);
 
         ConfigurationSection section;
 
@@ -53,7 +52,7 @@ public class Transaction extends BukkitRunnable {
             section = log.createSection(date);
 
         } else {
-           section =log.getConfigurationSection(date);
+            section = log.getConfigurationSection(date);
         }
 
         if (!section.contains(item.name()) || section.get(item.name()) == null) {
@@ -67,8 +66,7 @@ public class Transaction extends BukkitRunnable {
             updateConfig(log);
             log.save(file);
 
-        } catch (IOException| ParseException e) {
-            return;
+        } catch (IOException | ParseException e) {
         }
     }
 

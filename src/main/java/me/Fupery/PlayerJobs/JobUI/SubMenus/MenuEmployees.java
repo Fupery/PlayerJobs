@@ -5,11 +5,10 @@ import me.Fupery.PlayerJobs.JobUI.Buttons.AbstractButton;
 import me.Fupery.PlayerJobs.JobUI.Buttons.ButtonToken;
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
 import me.Fupery.PlayerJobs.Utils.Formatting;
-import org.bukkit.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -44,9 +43,9 @@ public class MenuEmployees extends AbstractMenu {
 
                 OfflinePlayer p = Bukkit.getOfflinePlayer(employees[i]);
 
-                buttons[i] = new ButtonToken(this, new String[] {
+                buttons[i] = new ButtonToken(this, new String[]{
                         ChatColor.GREEN + p.getName(), "Is ok I guess"
-                        }, Material.SKULL_ITEM, true);
+                }, Material.SKULL_ITEM, true);
                 buttons[i].setDurability((short) 3);
 
                 SkullMeta meta = ((SkullMeta) buttons[i].getItemMeta());
@@ -62,7 +61,7 @@ public class MenuEmployees extends AbstractMenu {
 
     @Override
     public void close() {
-        for (int i = 0; i < buttons.length; i ++) {
+        for (int i = 0; i < buttons.length; i++) {
             if (buttons[i] != null
                     && ((boolean) buttons[i].getReturnValue())) {
                 handler.getJob().getEmployees()[i] = null;
@@ -74,7 +73,7 @@ public class MenuEmployees extends AbstractMenu {
     @Override
     public void passValues(AbstractButton button, Object value) {
         int i;
-        for (i = 0; i < buttons.length; i ++) {
+        for (i = 0; i < buttons.length; i++) {
             if (button.equals(buttons[i])) {
                 break;
             }

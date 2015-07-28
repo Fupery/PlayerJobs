@@ -4,7 +4,7 @@ import me.Fupery.PlayerJobs.JobUI.Buttons.AbstractButton;
 
 public interface Menu {
 
-    public void close();
+    void close();
 
-    public void passValues(AbstractButton button, Object value);
+    void passValues(AbstractButton button, Object value);
 }

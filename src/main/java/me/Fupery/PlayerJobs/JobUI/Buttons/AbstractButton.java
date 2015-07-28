@@ -10,14 +10,11 @@ import java.util.List;
 
 public abstract class AbstractButton extends ItemStack implements MenuButton {
 
-    protected AbstractMenu menu;
     protected Object returnValue;
 
     protected AbstractButton(AbstractMenu menu, String[] displayText, Material displayItem) {
 
         super();
-
-        this.menu = menu;
 
         setType(displayItem);
         setAmount(1);

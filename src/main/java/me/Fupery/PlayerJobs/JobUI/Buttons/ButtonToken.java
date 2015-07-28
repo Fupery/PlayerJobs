@@ -7,10 +7,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class ButtonToken extends AbstractButton {
 
-    boolean doesToggle;
+    private boolean doesToggle;
 
     public ButtonToken(AbstractMenu menu, String[] displayText,
-                          Material displayItem, boolean doesToggle) {
+                       Material displayItem, boolean doesToggle) {
         super(menu, displayText, displayItem);
         this.doesToggle = doesToggle;
         returnValue = false;

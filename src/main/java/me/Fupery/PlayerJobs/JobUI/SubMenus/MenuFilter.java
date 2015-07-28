@@ -24,7 +24,6 @@ public class MenuFilter extends AbstractMenu {
         menu.setMaxStackSize(1);
         buttons = new AbstractButton[5];
         HashMap<Material, Double> filter = handler.getJob().getFilter();
-
         if (filter != null && filter.size() > 0) {
             int i = 0;
 
@@ -34,7 +33,7 @@ public class MenuFilter extends AbstractMenu {
                     buttons[i] = new ButtonCounter(this, new String[]{
                             ChatColor.GREEN + "Wage - " + m.name().toLowerCase(),
                             ChatColor.GOLD + "- $" + filter.get(m) +
-                                    ChatColor.YELLOW + " per stack",
+                                    ChatColor.YELLOW + " per stack.",
                             "The amount that will be payed to",
                             "your employees for every stack",
                             "that they collect for you.",
@@ -48,7 +47,8 @@ public class MenuFilter extends AbstractMenu {
             menu.setContents(buttons);
         }
     }
-    public boolean addButton (ItemStack itemStack, int slot) {
+
+    public boolean addButton(ItemStack itemStack, int slot) {
 
         for (AbstractButton button : buttons) {
 
@@ -68,15 +68,12 @@ public class MenuFilter extends AbstractMenu {
                 ChatColor.GOLD + "Press Q/drop key to remove"},
                 itemStack.getType(), 1, 0.5,
                 0, false, false);
-//        buttons[slot].setItemMeta(itemStack.getItemMeta());
-//        buttons[slot].setDurability(itemStack.getDurability());
-//        buttons[slot].setData(itemStack.getData());
+
         menu.setItem(slot, buttons[slot]);
         return true;
-
     }
 
-    public void delButton (int slot) {
+    public void delButton(int slot) {
         buttons[slot] = null;
         menu.setItem(slot, null);
     }
@@ -88,7 +85,8 @@ public class MenuFilter extends AbstractMenu {
         for (AbstractButton button : buttons) {
 
             if (button != null) {
-                filter.put(button.getType(), ((double) button.getReturnValue()));
+                double value = ((double) button.getReturnValue());
+                filter.put(button.getType(), value);
             }
         }
         handler.getJob().setFilter(filter);

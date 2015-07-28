@@ -19,19 +19,21 @@ import static me.Fupery.PlayerJobs.IO.Utils.getTag;
 
 public class PlayerJobs extends JavaPlugin {
 
+    private static Economy economy = null;
     private HashMap<Location, Job> jobList;
     private HashMap<Player, MenuHandler> openMenus;
-    private static Economy economy = null;
-
     private File data;
     private File logs;
+
+    public static Economy getEconomy() {
+        return economy;
+    }
 
     @Override
     public void onEnable() {
 
-        jobList = new HashMap<Location, Job>();
-        openMenus = new HashMap<Player, MenuHandler>();
-
+        jobList = new HashMap<>();
+        openMenus = new HashMap<>();
 
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new BlockBreakListener(this), this);
@@ -61,7 +63,7 @@ public class PlayerJobs extends JavaPlugin {
             }
         }
         Set<Location> keys = jobList.keySet();
-         if (jobList.size() > 0) {
+        if (jobList.size() > 0) {
             for (Location location : keys) {
                 saveJob(location);
             }
@@ -104,16 +106,13 @@ public class PlayerJobs extends JavaPlugin {
         return true;
     }
 
-    public boolean jobExists (Location location) {
+    public boolean jobExists(Location location) {
 
-        if (jobList.containsKey(location)
-                || new File(data, getTag(location)).exists()) {
-            return true;
-        }
-        return false;
+        return jobList.containsKey(location)
+                || new File(data, getTag(location)).exists();
     }
 
-    public Job getJob (Location location) {
+    public Job getJob(Location location) {
 
         if (jobList != null && jobList.containsKey(location)) {
             return jobList.get(location);
@@ -144,7 +143,7 @@ public class PlayerJobs extends JavaPlugin {
         return null;
     }
 
-    public void saveJob (Location location) {
+    public void saveJob(Location location) {
 
         if (jobList.containsKey(location)) {
             File file = new File(data, getTag(location));
@@ -167,8 +166,8 @@ public class PlayerJobs extends JavaPlugin {
         jobList.remove(location);
     }
 
-    public void deleteJob (Location location) {
-        File file = new File (data, getTag(location));
+    public void deleteJob(Location location) {
+        File file = new File(data, getTag(location));
 
         if (jobList.containsKey(location)) {
             jobList.remove(location);
@@ -176,12 +175,11 @@ public class PlayerJobs extends JavaPlugin {
         }
 
         if (file.exists()) {
-            if ( !file.delete()) {
+            if (!file.delete()) {
                 getLogger().info("file " + file.getName() + "could not be deleted.");
             }
         }
     }
-
 
     public HashMap<Location, Job> getJobList() {
         return jobList;
@@ -189,10 +187,6 @@ public class PlayerJobs extends JavaPlugin {
 
     public HashMap<Player, MenuHandler> getOpenMenus() {
         return openMenus;
-    }
-
-    public static Economy getEconomy() {
-        return economy;
     }
 
     public File getData() {

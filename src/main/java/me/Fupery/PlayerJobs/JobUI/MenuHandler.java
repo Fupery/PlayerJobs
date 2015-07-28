@@ -50,6 +50,7 @@ public class MenuHandler {
         branch.close();
         branch = null;
     }
+
     public void openInv(Inventory inventory) {
         branching = true;
         player.openInventory(inventory);
@@ -76,14 +77,14 @@ public class MenuHandler {
         return branching;
     }
 
+    public AbstractMenu getBranch() {
+        return branch;
+    }
+
     public void setBranch(AbstractMenu menu) {
         if (menu != root) {
             branch = menu;
         }
-    }
-
-    public AbstractMenu getBranch() {
-        return branch;
     }
 
     public Job getJob() {

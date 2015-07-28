@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class ButtonLink extends AbstractButton {
 
-    AbstractMenu linkedMenu;
+    private AbstractMenu linkedMenu;
 
     public ButtonLink(AbstractMenu menu, String[] displayText, Material displayItem,
                       AbstractMenu linkedMenu) {

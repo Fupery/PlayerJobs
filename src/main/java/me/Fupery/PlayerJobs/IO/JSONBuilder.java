@@ -2,7 +2,6 @@ package me.Fupery.PlayerJobs.IO;
 
 import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,13 +18,19 @@ import static me.Fupery.PlayerJobs.IO.Utils.dateFormat;
 
 public class JSONBuilder extends BukkitRunnable {
 
-    String[] args;
+    private static final String
+            command = "tellraw %s ", head = "[\"\",",
+            body = "{text:\"[%s]\",\"color\":\"%s\"," +
+                    "\"bold\":\"true\",\"hoverEvent\":{action:show_item," +
+                    "value:\"{id:minecraft:stone,tag:{display:{Name:%s,Lore:[",
+            tail = "]}}}\"}}",
+            trail = "]";
+
     PlayerJobs plugin;
     Player player;
     private File file;
-    private FileConfiguration log;
 
-    public JSONBuilder (PlayerJobs plugin, Player player) {
+    public JSONBuilder(PlayerJobs plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
 
@@ -56,7 +61,7 @@ public class JSONBuilder extends BukkitRunnable {
         if (dates.length > 1) {
             message += head;
 
-            for (int i = 0; i < dates.length; i ++) {
+            for (int i = 0; i < dates.length; i++) {
                 colour = (i % 2 == 0) ? "gray" : "dark_gray";
                 message += getSubMessage(dates[i], map.get(dates[i]), colour);
 
@@ -74,7 +79,7 @@ public class JSONBuilder extends BukkitRunnable {
         server.dispatchCommand(server.getConsoleSender(), message);
     }
 
-    public HashMap<Date, ConfigurationSection> getLogs ()
+    public HashMap<Date, ConfigurationSection> getLogs()
             throws ParseException, IOException {
 
         HashMap<Date, ConfigurationSection> map = new HashMap<>();
@@ -82,9 +87,7 @@ public class JSONBuilder extends BukkitRunnable {
         if (!file.exists()) {
             file.createNewFile();
         }
-        log = YamlConfiguration.loadConfiguration(file);
-
-        ConfigurationSection section;
+        FileConfiguration log = YamlConfiguration.loadConfiguration(file);
 
         for (String s : log.getKeys(false)) {
 
@@ -97,16 +100,16 @@ public class JSONBuilder extends BukkitRunnable {
         return map;
     }
 
-    public String getSubMessage (Date date, ConfigurationSection section, String colour) {
+    public String getSubMessage(Date date, ConfigurationSection section, String colour) {
 
-        String string, logs = new String();
+        String logs = "";
         String name = dateFormat.format(date).substring(0, 5);
 
         Set<String> set = section.getKeys(false);
         String[] keys = new String[set.size()];
         keys = set.toArray(keys);
 
-        for (int i = 0; i < keys.length; i ++) {
+        for (int i = 0; i < keys.length; i++) {
             logs += String.format("\\\"%s - %s\\\"", keys[i], section.get(keys[i]));
 
             if (i < keys.length - 1) {
@@ -115,12 +118,4 @@ public class JSONBuilder extends BukkitRunnable {
         }
         return String.format(body + logs + tail, name, colour, "Logs -");
     }
-
-    public static final String
-            command = "tellraw %s ", head = "[\"\",",
-            body = "{text:\"[%s]\",\"color\":\"%s\"," +
-                    "\"bold\":\"true\",\"hoverEvent\":{action:show_item," +
-                    "value:\"{id:minecraft:stone,tag:{display:{Name:%s,Lore:[",
-            tail = "]}}}\"}}",
-            trail = "]";
 }

@@ -31,15 +31,57 @@ public class Job {
     private HashMap<Material, Double> filter;
 
     public Job(PlayerJobs plugin, OfflinePlayer player) {
-//        JobInventoryHolder holder = new JobInventoryHolder(plugin, player);
+        JobInventoryHolder holder = new JobInventoryHolder(plugin, player);
         this.plugin = plugin;
         employer = player.getUniqueId();
         employees = new UUID[9];
         balance = 0;
-        inventory = Bukkit.createInventory((Player) player,
+        inventory = Bukkit.createInventory(holder,
                 InventoryType.CHEST, Formatting.inventoryHeading);
-//        holder.setInventory(inventory);
         filter = new HashMap<>();
+    }
+
+    public static Job deserialize(PlayerJobs plugin, HashMap<String, Object> map) {
+        Job job = new Job(plugin, Bukkit.getOfflinePlayer(((UUID) map.get("employer"))));
+        job.setBalance(((double) map.get("balance")));
+        job.setEmployees((UUID[]) map.get("employees"));
+        job.getInventory().setContents(deSerializeInv((map.get("inventory"))));
+        job.setFilter((HashMap<Material, Double>) map.get("filter"));
+
+        return job;
+    }
+
+    private static List serializeInv(Inventory inventory) {
+        ItemStack[] items = inventory.getContents();
+        Object[] tags = new Object[items.length];
+
+        for (int i = 0; i < items.length; i++) {
+
+            if (items[i] != null) {
+                tags[i] = items[i].serialize();
+
+            } else {
+                tags[i] = null;
+            }
+        }
+        return Arrays.asList(tags);
+    }
+
+    private static ItemStack[] deSerializeInv(Object list) {
+        Object[] tags = ((List) list).toArray();
+        ItemStack[] items = new ItemStack[tags.length];
+
+        for (int i = 0; i < items.length; i++) {
+
+            if (tags[i] != null) {
+
+                items[i] = ItemStack.deserialize(((HashMap<String, Object>) tags[i]));
+
+            } else {
+                items[i] = null;
+            }
+        }
+        return items;
     }
 
     public void onLeftCLick(PlayerInteractEvent event) {
@@ -67,7 +109,7 @@ public class Job {
         } else if (isEmployee(player)) {
 
             ItemStack item = player.getItemInHand();
-                dump(item, player);
+            dump(item, player);
         } else {
             player.sendMessage(Formatting.playerMessage(
                     "Shift & Right-Click to apply for this job"));
@@ -96,7 +138,7 @@ public class Job {
         }
     }
 
-    private void dump (ItemStack item, Player player) {
+    private void dump(ItemStack item, Player player) {
 
         if (item != null && item.getType() != Material.AIR) {
 
@@ -149,9 +191,10 @@ public class Job {
             }
         }
     }
+
     // Iterates through inventory and checks if there is room for
     // The itemstack in the player's hand - returns the remainder
-    public int depositItems (ItemStack item) {
+    private int depositItems(ItemStack item) {
 
         int amountLeftToDeposit = item.getAmount();
 
@@ -194,11 +237,12 @@ public class Job {
         for (UUID id : employees) {
             if (id != null) {
                 sort[k] = id;
-                k ++;
+                k++;
             }
         }
         employees = Arrays.copyOf(sort, k + 1);
     }
+
     private boolean isEmployee(Player player) {
 
         if (employees == null) {
@@ -213,9 +257,10 @@ public class Job {
         }
         return false;
     }
+
     private boolean addEmployee(Player player) {
 
-        for (int i = 0; i < employees.length; i ++) {
+        for (int i = 0; i < employees.length; i++) {
 
             if (employees[i] == null) {
                 employees[i] = player.getUniqueId();
@@ -225,7 +270,7 @@ public class Job {
         return false;
     }
 
-    public HashMap<String, Object> serialize () {
+    public HashMap<String, Object> serialize() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("balance", balance);
         map.put("employer", employer);
@@ -235,58 +280,15 @@ public class Job {
         return map;
     }
 
-    public static Job deserialize (PlayerJobs plugin, HashMap<String, Object> map) {
-        Job job = new Job(plugin, Bukkit.getOfflinePlayer(((UUID) map.get("employer"))));
-        job.setBalance(((double) map.get("balance")));
-        job.setEmployees((UUID[]) map.get("employees"));
-        job.getInventory().setContents(deSerializeInv(( map.get("inventory"))));
-        job.setFilter((HashMap<Material, Double>) map.get("filter"));
-
-        return job;
-    }
-
-    private static List serializeInv (Inventory inventory) {
-        ItemStack[] items = inventory.getContents();
-        Object[] tags = new Object[items.length];
-
-        for (int i = 0; i < items.length; i ++) {
-
-            if (items[i] != null) {
-                tags[i] = items[i].serialize();
-
-            } else {
-                tags[i] = null;
-            }
-        }
-        return Arrays.asList(tags);
-    }
-
-    private static ItemStack[] deSerializeInv (Object list) {
-        Object[] tags = ((List) list).toArray();
-        ItemStack[] items = new ItemStack[tags.length];
-
-        for (int i = 0; i < items.length; i ++) {
-
-            if (tags[i] != null) {
-
-                items[i] = ItemStack.deserialize(((HashMap<String, Object>) tags[i]));
-
-            } else {
-                items[i] = null;
-            }
-        }
-        return items;
-    }
-
-    public void onBreak (Location location) {
+    public void onBreak(Location location) {
 
         OfflinePlayer player = Bukkit.getOfflinePlayer(employer);
         PlayerJobs.getEconomy().depositPlayer(player, balance);
         plugin.deleteJob(location);
 
-        if (plugin.getServer().getOnlinePlayers().contains(player)) {
+        if (plugin.getServer().getOnlinePlayers().contains(((Player) player))) {
 
-            ((Player) player).sendMessage( new String[] {
+            ((Player) player).sendMessage(new String[]{
 
                     Formatting.playerMessage(String.format(
                             "Your job sign at [%s, %s, %s] has been destroyed",
@@ -341,6 +343,7 @@ public class Job {
     }
 
 }
+
 class JobInventoryHolder implements InventoryHolder {
 
     private PlayerJobs plugin;
@@ -355,13 +358,13 @@ class JobInventoryHolder implements InventoryHolder {
     @Override
     public Inventory getInventory() {
 
-        if (plugin.getServer().getOnlinePlayers().contains(player)) {
+        if (plugin.getServer().getOnlinePlayers().contains(((Player) player))) {
             return ((Player) player).getInventory();
         }
         return inventory;
     }
 
-    public void setInventory (Inventory inventory) {
+    public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
 }

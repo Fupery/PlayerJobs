@@ -10,12 +10,12 @@ public class InventoryDragListener implements Listener {
 
     PlayerJobs plugin;
 
-    public InventoryDragListener (PlayerJobs plugin) {
+    public InventoryDragListener(PlayerJobs plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onInventoryDragEvent (InventoryDragEvent event) {
+    public void onInventoryDragEvent(InventoryDragEvent event) {
         String title = event.getInventory().getTitle();
 
         if (title.equals(Formatting.menuHeading)

@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class InventoryClickListener implements Listener {
 
@@ -60,10 +59,10 @@ public class InventoryClickListener implements Listener {
 
                                 if (event.getClick() == ClickType.DROP) {
                                     ((MenuFilter) menu).delButton(event.getSlot());
+
                                 }
                                 menu.click(event);
                             }
-
                         }
 
                     } else if (menu instanceof MenuEmployees) {

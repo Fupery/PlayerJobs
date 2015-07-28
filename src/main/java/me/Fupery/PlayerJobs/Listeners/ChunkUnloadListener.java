@@ -13,12 +13,12 @@ public class ChunkUnloadListener extends BukkitRunnable implements Listener {
     private PlayerJobs plugin;
     private Chunk chunk;
 
-    public ChunkUnloadListener (PlayerJobs plugin) {
+    public ChunkUnloadListener(PlayerJobs plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onChunkUnload (ChunkUnloadEvent event) {
+    public void onChunkUnload(ChunkUnloadEvent event) {
         this.chunk = event.getChunk();
         runTaskAsynchronously(plugin);
     }

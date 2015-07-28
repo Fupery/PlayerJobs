@@ -5,5 +5,5 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 public interface MenuButton {
 
-    public void onInventoryClick(AbstractMenu menu, InventoryClickEvent event);
+    void onInventoryClick(AbstractMenu menu, InventoryClickEvent event);
 }

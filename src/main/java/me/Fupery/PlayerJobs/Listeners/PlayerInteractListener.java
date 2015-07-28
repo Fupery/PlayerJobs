@@ -3,7 +3,6 @@ package me.Fupery.PlayerJobs.Listeners;
 import me.Fupery.PlayerJobs.Jobs.Job;
 import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
-import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;

@@ -13,12 +13,12 @@ public class BlockPhysicsListener implements Listener {
 
     private PlayerJobs plugin;
 
-    public BlockPhysicsListener (PlayerJobs plugin) {
+    public BlockPhysicsListener(PlayerJobs plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onBlockPhysicsEvent (BlockPhysicsEvent event) {
+    public void onBlockPhysicsEvent(BlockPhysicsEvent event) {
 
         if (event.getBlock().getType() == Material.WALL_SIGN) {
             Sign sign = ((Sign) event.getBlock().getState());

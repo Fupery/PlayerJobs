@@ -46,7 +46,7 @@ public class ButtonCounter extends AbstractButton {
                 i = -increment;
             }
         }
-        
+
         if (hasMax && ((i + j) - initialAmount > maxDeposit)) {
             return;
         }

@@ -8,8 +8,9 @@ import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -118,10 +119,10 @@ public class JobMenu extends AbstractMenu {
         EconomyResponse r;
         String s;
         if (d < 0) {
-            r = PlayerJobs.getEconomy().depositPlayer(handler.getPlayer(), -d);
+            PlayerJobs.getEconomy().depositPlayer(handler.getPlayer(), -d);
             s = "withdrew %s%s from";
         } else {
-            r = PlayerJobs.getEconomy().withdrawPlayer(handler.getPlayer(), d);
+            PlayerJobs.getEconomy().withdrawPlayer(handler.getPlayer(), d);
             s = "deposited %s%s into";
         }
 

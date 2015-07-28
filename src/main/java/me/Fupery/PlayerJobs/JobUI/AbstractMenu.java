@@ -12,7 +12,7 @@ public abstract class AbstractMenu implements Menu {
 
     protected AbstractButton[] buttons;
 
-    public AbstractMenu(MenuHandler handler) {
+    protected AbstractMenu(MenuHandler handler) {
         this.handler = handler;
     }
 
@@ -35,21 +35,25 @@ public abstract class AbstractMenu implements Menu {
     public Inventory getInventory() {
         return menu;
     }
+
     public void setInventory(Inventory inventory) {
         this.menu = inventory;
     }
+
     public MenuHandler getHandler() {
         return handler;
     }
+
     public AbstractButton[] getButtons() {
         return buttons;
     }
 
 }
+
 class UpdateTask extends BukkitRunnable {
 
-    AbstractButton button;
-    AbstractMenu menu;
+    private AbstractButton button;
+    private AbstractMenu menu;
 
     public UpdateTask(AbstractButton button, AbstractMenu menu) {
         this.button = button;
