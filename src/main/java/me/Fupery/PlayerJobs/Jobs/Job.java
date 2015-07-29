@@ -2,6 +2,7 @@ package me.Fupery.PlayerJobs.Jobs;
 
 import me.Fupery.PlayerJobs.IO.Transaction;
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
+import me.Fupery.PlayerJobs.JobUI.MenuType;
 import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
 import org.bukkit.Bukkit;
@@ -104,7 +105,7 @@ public class Job {
         Player player = event.getPlayer();
 
         if (player.getUniqueId().equals(employer)) {
-            plugin.getOpenMenus().put(player, new MenuHandler(plugin, this));
+            plugin.getOpenMenus().put(player, new MenuHandler(plugin, this, MenuType.GATHERER));
 
         } else if (isEmployee(player)) {
 
@@ -121,7 +122,7 @@ public class Job {
         Player player = event.getPlayer();
 
         if (player.getUniqueId().equals(employer)) {
-            plugin.getOpenMenus().put(player, new MenuHandler(plugin, this));
+            plugin.getOpenMenus().put(player, new MenuHandler(plugin, this, MenuType.GATHERER));
 
         } else if (isEmployee(player)) {
             dump(event.getItem(), player);

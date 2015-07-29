@@ -17,17 +17,19 @@ public class MenuHandler {
 
     private boolean branching;
 
-    public MenuHandler(PlayerJobs plugin, Job job) {
+    public MenuHandler(PlayerJobs plugin, Job job, MenuType type) {
         this.job = job;
         this.plugin = plugin;
         player = Bukkit.getPlayer(job.getEmployer());
         branching = false;
-        openRoot();
+        openRoot(type);
     }
 
-    public void openRoot() {
-
-        root = new JobMenu(this);
+    public void openRoot(MenuType type) {
+        switch (type) {
+            case GATHERER:
+                root = new JobMenu(this);
+        }
         root.open();
     }
 

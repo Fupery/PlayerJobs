@@ -1,6 +1,7 @@
 package me.Fupery.PlayerJobs.Listeners;
 
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
+import me.Fupery.PlayerJobs.JobUI.MenuType;
 import me.Fupery.PlayerJobs.Jobs.Job;
 import me.Fupery.PlayerJobs.PlayerJobs;
 import me.Fupery.PlayerJobs.Utils.Formatting;
@@ -32,7 +33,7 @@ public class SignChangeListener implements Listener {
             Job job = new Job(plugin, player);
             plugin.getJobList().put(event.getBlock().getLocation(), job);
             plugin.getOpenMenus().put(player,
-                    new MenuHandler(plugin, job));
+                    new MenuHandler(plugin, job, MenuType.GATHERER));
         }
     }
 }
