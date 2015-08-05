@@ -2,6 +2,7 @@ package me.Fupery.PlayerJobs.Listeners;
 
 import me.Fupery.PlayerJobs.JobUI.AbstractMenu;
 import me.Fupery.PlayerJobs.JobUI.MenuHandler;
+import me.Fupery.PlayerJobs.JobUI.MenuType;
 import me.Fupery.PlayerJobs.JobUI.SubMenus.JobMenu;
 import me.Fupery.PlayerJobs.JobUI.SubMenus.MenuEmployees;
 import me.Fupery.PlayerJobs.JobUI.SubMenus.MenuFilter;
@@ -44,7 +45,7 @@ public class InventoryCloseListener implements Listener {
                     Bukkit.getScheduler().runTask(plugin, new Runnable() {
                         @Override
                         public void run() {
-                            handler.openRoot();
+                            handler.openRoot(MenuType.GATHERER);
                         }
                     });
 
@@ -56,7 +57,7 @@ public class InventoryCloseListener implements Listener {
                     Bukkit.getScheduler().runTask(plugin, new Runnable() {
                         @Override
                         public void run() {
-                            handler.openRoot();
+                            handler.openRoot(MenuType.GATHERER);
                         }
                     });
                 }
