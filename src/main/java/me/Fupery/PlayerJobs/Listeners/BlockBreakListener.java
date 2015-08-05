@@ -41,7 +41,7 @@ public class BlockBreakListener implements Listener {
                     Player player = event.getPlayer();
 
                     if (!Bukkit.getPlayer(job.getEmployer()).equals(player)
-                            && !player.hasPermission("playerjobs.admin")) {
+                            && !player.hasPermission("playerjobs.override")) {
 
                         player.sendMessage(Formatting.playerMessage(
                                 "You don't have permission to break this job sign"));

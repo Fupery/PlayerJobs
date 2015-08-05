@@ -11,3 +11,8 @@ permissions:
   playerjobs.override:
     description: Allows players to delete jobs
     default: op
+  playerjobs.admin:
+    description: Allows creation and deletion of jobs
+    children:
+      playerjobs.employer: true
+      playerjobs.override: true
