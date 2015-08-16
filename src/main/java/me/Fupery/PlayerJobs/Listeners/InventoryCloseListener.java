@@ -25,41 +25,46 @@ public class InventoryCloseListener implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
 
-        String title = event.getInventory().getTitle().substring(2, 7);
+        String inventory = event.getInventory().getTitle();
 
-        if (title.equals("[Job]")) {
+        if (inventory != null && inventory.length() > 7) {
 
-            Player player = ((Player) event.getPlayer());
+            String title = inventory.substring(2, 7);
 
-            if (plugin.getOpenMenus().containsKey(player)) {
-                AbstractMenu menu =
-                        plugin.getOpenMenus().get(player).getMenu(event.getInventory());
+            if (title.equals("[Job]")) {
 
-                final MenuHandler handler = plugin.getOpenMenus().get(player);
+                Player player = ((Player) event.getPlayer());
 
-                if (menu instanceof JobMenu) {
-                    handler.closeRoot();
+                if (plugin.getOpenMenus().containsKey(player)) {
+                    AbstractMenu menu =
+                            plugin.getOpenMenus().get(player).getMenu(event.getInventory());
 
-                } else if (event.getInventory().getTitle().equals(Formatting.inventoryHeading)) {
-                    handler.closeInv();
-                    Bukkit.getScheduler().runTask(plugin, new Runnable() {
-                        @Override
-                        public void run() {
-                            handler.openRoot(MenuType.GATHERER);
-                        }
-                    });
+                    final MenuHandler handler = plugin.getOpenMenus().get(player);
 
-                } else if (menu instanceof MenuEmployees
-                        || menu instanceof MenuFilter) {
+                    if (menu instanceof JobMenu) {
+                        handler.closeRoot();
 
-                    handler.closeBranch();
+                    } else if (event.getInventory().getTitle().equals(Formatting.inventoryHeading)) {
+                        handler.closeInv();
+                        Bukkit.getScheduler().runTask(plugin, new Runnable() {
+                            @Override
+                            public void run() {
+                                handler.openRoot(MenuType.GATHERER);
+                            }
+                        });
 
-                    Bukkit.getScheduler().runTask(plugin, new Runnable() {
-                        @Override
-                        public void run() {
-                            handler.openRoot(MenuType.GATHERER);
-                        }
-                    });
+                    } else if (menu instanceof MenuEmployees
+                            || menu instanceof MenuFilter) {
+
+                        handler.closeBranch();
+
+                        Bukkit.getScheduler().runTask(plugin, new Runnable() {
+                            @Override
+                            public void run() {
+                                handler.openRoot(MenuType.GATHERER);
+                            }
+                        });
+                    }
                 }
             }
         }
